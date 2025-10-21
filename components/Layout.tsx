@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '../contexts/AuthContext'
 import { User, LogOut, Settings } from 'lucide-react'
 
 export default function Layout({ children }: { children: React.ReactNode }) {

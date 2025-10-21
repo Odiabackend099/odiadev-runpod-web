@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { api } from '@/lib/api'
+import { api } from '../lib/api'
 
 export default function VoiceCloner() {
   const [audioFile, setAudioFile] = useState<File | null>(null)
@@ -13,12 +13,10 @@ export default function VoiceCloner() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      // Validate file type
       if (!file.type.startsWith('audio/')) {
         setError('Please select an audio file')
         return
       }
-      // Validate file size (max 10MB)
       if (file.size > 10 * 1024 * 1024) {
         setError('File size must be less than 10MB')
         return
@@ -59,7 +57,6 @@ export default function VoiceCloner() {
     setVoiceName('')
     setResult(null)
     setError(null)
-    // Reset file input
     const fileInput = document.getElementById('audio-file') as HTMLInputElement
     if (fileInput) fileInput.value = ''
   }
@@ -179,5 +176,3 @@ export default function VoiceCloner() {
     </div>
   )
 }
-
-

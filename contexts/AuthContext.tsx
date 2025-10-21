@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 import { User as SupabaseUser, Session } from '@supabase/supabase-js'
-import { supabase, isSupabaseConfigured, User } from '@/lib/supabase'
+import { supabase, User } from '../lib/supabase'
 import toast from 'react-hot-toast'
 
 interface AuthContextType {
@@ -22,16 +22,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
-  const supabaseClient = supabase
 
   useEffect(() => {
-    if (!supabaseClient || !isSupabaseConfigured) {
+    if (!supabase) {
       setLoading(false)
       return
     }
 
-    // Get initial session
-    supabaseClient.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       if (session?.user) {
         fetchUserProfile(session.user.id)
@@ -41,10 +39,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     })
 
-    // Listen for auth changes
     const {
       data: { subscription },
-    } = supabaseClient.auth.onAuthStateChange(async (event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session)
       
       if (session?.user) {
@@ -56,12 +53,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     return () => subscription.unsubscribe()
-  }, [supabaseClient])
+  }, [])
 
   const fetchUserProfile = async (userId: string) => {
-    if (!supabaseClient) return
+    if (!supabase) return
+    
     try {
-      const { data, error } = await supabaseClient
+      const { data, error } = await supabase
         .from('users')
         .select('*')
         .eq('id', userId)
@@ -69,7 +67,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error('Error fetching user profile:', error)
-        // Create user profile if it doesn't exist
         await createUserProfile(userId)
       } else {
         setUser(data)
@@ -82,11 +79,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const createUserProfile = async (userId: string) => {
-    if (!supabaseClient) return
+    if (!supabase) return
+    
     try {
-      const { data: authUser } = await supabaseClient.auth.getUser()
+      const { data: authUser } = await supabase.auth.getUser()
       
-      const { data, error } = await supabaseClient
+      const { data, error } = await supabase
         .from('users')
         .insert({
           id: userId,
@@ -108,13 +106,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    if (!supabaseClient) {
-      const message = 'Authentication is currently unavailable.'
-      toast.error(message)
-      throw new Error(message)
-    }
+    if (!supabase) throw new Error('Supabase not initialized')
+    
     try {
-      const { error } = await supabaseClient.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -134,13 +129,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signIn = async (email: string, password: string) => {
-    if (!supabaseClient) {
-      const message = 'Authentication is currently unavailable.'
-      toast.error(message)
-      throw new Error(message)
-    }
+    if (!supabase) throw new Error('Supabase not initialized')
+    
     try {
-      const { error } = await supabaseClient.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
@@ -155,13 +147,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
-    if (!supabaseClient) {
-      const message = 'Authentication is currently unavailable.'
-      toast.error(message)
-      throw new Error(message)
-    }
+    if (!supabase) throw new Error('Supabase not initialized')
+    
     try {
-      const { error } = await supabaseClient.auth.signOut()
+      const { error } = await supabase.auth.signOut()
       if (error) throw error
       
       toast.success('Signed out successfully')
@@ -172,13 +161,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const resetPassword = async (email: string) => {
-    if (!supabaseClient) {
-      const message = 'Authentication is currently unavailable.'
-      toast.error(message)
-      throw new Error(message)
-    }
+    if (!supabase) throw new Error('Supabase not initialized')
+    
     try {
-      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth/reset-password`,
       })
 
@@ -192,15 +178,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const updateProfile = async (updates: Partial<User>) => {
-    if (!supabaseClient) {
-      const message = 'Authentication is currently unavailable.'
-      toast.error(message)
-      throw new Error(message)
-    }
+    if (!supabase) throw new Error('Supabase not initialized')
+    
     try {
       if (!user) throw new Error('No user logged in')
 
-      const { error } = await supabaseClient
+      const { error } = await supabase
         .from('users')
         .update(updates)
         .eq('id', user.id)
@@ -236,5 +219,3 @@ export function useAuth() {
   }
   return context
 }
-
-

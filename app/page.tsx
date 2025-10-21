@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Layout from '@/components/Layout'
-import TTSPlayer from '@/components/TTSPlayer'
-import VoiceCloner from '@/components/VoiceCloner'
+import Layout from '../components/Layout'
+import TTSPlayer from '../components/TTSPlayer'
+import VoiceCloner from '../components/VoiceCloner'
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<'tts' | 'clone'>('tts')
