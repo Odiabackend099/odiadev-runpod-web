@@ -1,89 +1,89 @@
-# Planning: Cursor Integration Instructions for ODIA.AI TTS
+# Planning: AGGRESSIVE Fix for Vercel Build Module Resolution
 
 ## Problem Statement
-Create comprehensive Cursor integration instructions to connect Vercel-hosted frontend to RunPod-hosted backend for the ODIA.AI Text-to-Speech system.
+Vercel build is failing because Next.js cannot resolve `@/` path aliases for `lib`, `components`, and `contexts` directories. The TypeScript configuration exists but is not being properly utilized during the Webpack build process.
 
 ## Implementation Phases
 
-### Phase 1: Backend API Documentation
-- **Goal**: Document critical backend fixes and API endpoints
+### Phase 1: Update TypeScript Configuration
+- **Goal**: Ensure TypeScript correctly recognizes all path aliases
 - **Tasks**:
-  1. Document Form import fix for voice.py
-  2. Document python-multipart dependency addition
-  3. List all API endpoints with examples
-  4. Document CORS configuration
-  5. Create environment variable template
-- **Success Criteria**: Complete backend API reference with fixes
+  1. Update `tsconfig.json` with explicit path mappings
+  2. Add all necessary directories to include array
+  3. Verify baseUrl is set correctly
+- **Success Criteria**: TypeScript recognizes all `@/` imports
 
-### Phase 2: Frontend Integration Code
-- **Goal**: Create TypeScript API client and React components
+### Phase 2: Update Next.js Configuration  
+- **Goal**: Make Next.js/Webpack aware of path aliases
 - **Tasks**:
-  1. Create API client with all endpoints
-  2. Build React TTS component
-  3. Create voice cloning component
-  4. Add error handling and loading states
-  5. Implement audio playback functionality
-- **Success Criteria**: Working frontend components that connect to backend
+  1. Add webpack configuration to resolve aliases
+  2. Use Node.js path module for absolute paths
+  3. Configure both development and production builds
+- **Success Criteria**: Webpack resolves all `@/` imports during build
 
-### Phase 3: Deployment Instructions
-- **Goal**: Provide step-by-step deployment guide
+### Phase 3: Verify File Structure
+- **Goal**: Ensure all files exist in correct locations
 - **Tasks**:
-  1. Document RunPod backend setup
-  2. Create Vercel frontend deployment steps
-  3. Configure environment variables
-  4. Set up CORS properly
-  5. Test end-to-end connection
-- **Success Criteria**: Complete deployment guide with working connection
+  1. Confirm all component files exist
+  2. Confirm all context files exist
+  3. Confirm all lib files exist
+  4. Check for any duplicate or conflicting files
+- **Success Criteria**: All referenced files exist and are accessible
 
-### Phase 4: Testing and Troubleshooting
-- **Goal**: Provide comprehensive testing and debugging guide
+### Phase 4: Test and Deploy
+- **Goal**: Verify build works locally and on Vercel
 - **Tasks**:
-  1. Create testing checklist
-  2. Document common issues and fixes
-  3. Provide monitoring commands
-  4. Create quick start commands
-  5. Add support information
-- **Success Criteria**: Complete troubleshooting guide with solutions
+  1. Test local build with `npm run build`
+  2. Commit and push changes
+  3. Monitor Vercel build logs
+  4. Verify successful deployment
+- **Success Criteria**: Vercel build completes successfully
 
 ## Technical Requirements
 
-### Backend Requirements
-- FastAPI with proper CORS configuration
-- Form data handling with python-multipart
-- Redis for caching
-- HuggingFace model integration
-- Health check endpoints
+### TypeScript Configuration
+- `baseUrl`: "." (root directory)
+- `paths`: Explicit mappings for `@/*`
+- `include`: All TypeScript/TSX files
+- `moduleResolution`: "node"
 
-### Frontend Requirements
-- Next.js with TypeScript
-- API client with error handling
-- Audio playback components
-- Environment variable configuration
-- CORS-compatible requests
+### Next.js Configuration
+- Webpack resolve alias configuration
+- Path module for absolute path resolution
+- No deprecated experimental flags
 
-### Integration Requirements
-- Proper API URL configuration
-- CORS headers setup
-- Error handling and user feedback
-- Audio blob handling
-- Form data submission
+### File Structure
+```
+/
+├── lib/
+│   ├── api.ts
+│   └── supabase.ts
+├── components/
+│   ├── Layout.tsx
+│   ├── TTSPlayer.tsx
+│   ├── VoiceCloner.tsx
+│   └── AudioPlayer.tsx
+├── contexts/
+│   └── AuthContext.tsx
+└── app/
+    └── ...
+```
 
 ## Testing Criteria
 
-### Backend Tests
-- Health check endpoint responds
-- TTS generation works
-- Voice cloning accepts files
-- CORS headers are correct
+### Local Build Test
+- Run `npm run build` locally
+- Verify no module resolution errors
+- Confirm build completes successfully
 
-### Frontend Tests
-- API client connects to backend
-- TTS generation works in UI
-- Audio playback functions
-- Error handling displays properly
+### Vercel Build Test
+- Push to GitHub
+- Monitor Vercel build logs
+- Verify successful deployment
+- Test deployed application
 
-### Integration Tests
-- End-to-end TTS generation
-- Voice cloning workflow
-- Cross-origin requests work
-- Environment variables load correctly
+## Risk Mitigation
+- Use both TypeScript AND Webpack configuration
+- Test locally before pushing
+- Keep backup of working configuration
+- Use explicit paths if aliases fail
