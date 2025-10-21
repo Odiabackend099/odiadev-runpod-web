@@ -1,102 +1,89 @@
-# Planning: Repository Cleanup and RunPod Preparation
+# Planning: Cursor Integration Instructions for ODIA.AI TTS
 
 ## Problem Statement
-Analyze current repository state, remove confusing/conflicting files, implement fixes, and prepare for RunPod web terminal deployment. Repository needs to be clean and production-ready.
+Create comprehensive Cursor integration instructions to connect Vercel-hosted frontend to RunPod-hosted backend for the ODIA.AI Text-to-Speech system.
 
 ## Implementation Phases
 
-### Phase 1: Repository Analysis
-- **Goal**: Understand current state and identify issues
+### Phase 1: Backend API Documentation
+- **Goal**: Document critical backend fixes and API endpoints
 - **Tasks**:
-  1. Analyze current folder structure
-  2. Identify confusing or conflicting files
-  3. Check for missing essential files
-  4. Document current state
-- **Success Criteria**: Clear understanding of repository state and issues
+  1. Document Form import fix for voice.py
+  2. Document python-multipart dependency addition
+  3. List all API endpoints with examples
+  4. Document CORS configuration
+  5. Create environment variable template
+- **Success Criteria**: Complete backend API reference with fixes
 
-### Phase 2: Cleanup and Fixes
-- **Goal**: Remove conflicts and implement necessary fixes
+### Phase 2: Frontend Integration Code
+- **Goal**: Create TypeScript API client and React components
 - **Tasks**:
-  1. Remove confusing/conflicting files
-  2. Restore essential files if missing
-  3. Fix any broken configurations
-  4. Ensure clean structure
-- **Success Criteria**: Clean repository with no conflicts
+  1. Create API client with all endpoints
+  2. Build React TTS component
+  3. Create voice cloning component
+  4. Add error handling and loading states
+  5. Implement audio playback functionality
+- **Success Criteria**: Working frontend components that connect to backend
 
-### Phase 3: RunPod Preparation
-- **Goal**: Prepare repository for RunPod deployment
+### Phase 3: Deployment Instructions
+- **Goal**: Provide step-by-step deployment guide
 - **Tasks**:
-  1. Ensure RunPod-compatible structure
-  2. Add deployment scripts if needed
-  3. Verify all dependencies are clear
-  4. Test deployment readiness
-- **Success Criteria**: Repository ready for RunPod deployment
+  1. Document RunPod backend setup
+  2. Create Vercel frontend deployment steps
+  3. Configure environment variables
+  4. Set up CORS properly
+  5. Test end-to-end connection
+- **Success Criteria**: Complete deployment guide with working connection
 
-### Phase 4: GitHub Push
-- **Goal**: Push clean repository to GitHub
+### Phase 4: Testing and Troubleshooting
+- **Goal**: Provide comprehensive testing and debugging guide
 - **Tasks**:
-  1. Commit all changes
-  2. Push to GitHub
-  3. Verify push success
-  4. Confirm repository is accessible
-- **Success Criteria**: Clean repository pushed to GitHub
+  1. Create testing checklist
+  2. Document common issues and fixes
+  3. Provide monitoring commands
+  4. Create quick start commands
+  5. Add support information
+- **Success Criteria**: Complete troubleshooting guide with solutions
 
 ## Technical Requirements
 
-### Repository Structure Requirements
-- Clean folder structure
-- No conflicting files
-- Essential files present
-- RunPod-compatible layout
+### Backend Requirements
+- FastAPI with proper CORS configuration
+- Form data handling with python-multipart
+- Redis for caching
+- HuggingFace model integration
+- Health check endpoints
 
-### RunPod Requirements
-- Clear deployment instructions
-- Proper dependency management
-- Environment configuration
-- Production-ready code
+### Frontend Requirements
+- Next.js with TypeScript
+- API client with error handling
+- Audio playback components
+- Environment variable configuration
+- CORS-compatible requests
 
-### GitHub Requirements
-- Clean git history
-- Proper .gitignore
-- Security measures in place
-- Documentation complete
+### Integration Requirements
+- Proper API URL configuration
+- CORS headers setup
+- Error handling and user feedback
+- Audio blob handling
+- Form data submission
 
 ## Testing Criteria
 
-### Repository Analysis Tests
-- All files identified and categorized
-- Conflicts and issues documented
-- Missing files identified
+### Backend Tests
+- Health check endpoint responds
+- TTS generation works
+- Voice cloning accepts files
+- CORS headers are correct
 
-### Cleanup Tests
-- Conflicting files removed
-- Essential files restored
-- Structure is clean
+### Frontend Tests
+- API client connects to backend
+- TTS generation works in UI
+- Audio playback functions
+- Error handling displays properly
 
-### RunPod Preparation Tests
-- Deployment scripts work
-- Dependencies are clear
-- Configuration is correct
-
-### GitHub Push Tests
-- Push completes successfully
-- Repository is accessible
-- All changes are committed
-
-## Dependencies and Assumptions
-
-### Dependencies
-- Current repository files
-- RunPod deployment environment
-- GitHub repository access
-
-### Assumptions
-- RunPod needs minimal, clean repository
-- Conflicting files cause deployment issues
-- Clean git history is required
-
-## Risk Mitigation
-- If files are missing, restore from backup
-- If conflicts exist, remove conflicting versions
-- If deployment fails, check RunPod requirements
-- If push fails, check git configuration
+### Integration Tests
+- End-to-end TTS generation
+- Voice cloning workflow
+- Cross-origin requests work
+- Environment variables load correctly

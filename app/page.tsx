@@ -2,48 +2,11 @@
 
 import { useState } from 'react'
 import Layout from '@/components/Layout'
-import AudioPlayer from '@/components/AudioPlayer'
+import TTSPlayer from '@/components/TTSPlayer'
+import VoiceCloner from '@/components/VoiceCloner'
 
 export default function HomePage() {
-  const [text, setText] = useState('')
-  const [audioUrl, setAudioUrl] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const generateSpeech = async () => {
-    if (!text.trim()) return
-    
-    setLoading(true)
-    setError(null)
-    setAudioUrl(null)
-    
-    try {
-      const response = await fetch('/api/v1/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          text,
-          voice: 'default',
-          duration: 30
-        }),
-      })
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      
-      const audioBlob = await response.blob()
-      const url = URL.createObjectURL(audioBlob)
-      setAudioUrl(url)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to generate speech')
-      console.error('Error generating speech:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const [activeTab, setActiveTab] = useState<'tts' | 'clone'>('tts')
 
   return (
     <Layout>
@@ -74,63 +37,35 @@ export default function HomePage() {
               Try ODIADEV-TTS 1.6B
             </h2>
             
-            <div className="max-w-2xl mx-auto">
-              <div className="mb-6">
-                <label htmlFor="text" className="block text-sm font-medium text-gray-700 mb-2">
-                  Enter text to convert to speech
-                </label>
-                <textarea
-                  id="text"
-                  rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                  placeholder="Type your text here..."
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                />
+            {/* Tab Navigation */}
+            <div className="flex justify-center mb-8">
+              <div className="bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setActiveTab('tts')}
+                  className={`px-6 py-2 rounded-md font-medium transition ${
+                    activeTab === 'tts'
+                      ? 'bg-white text-indigo-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Text-to-Speech
+                </button>
+                <button
+                  onClick={() => setActiveTab('clone')}
+                  className={`px-6 py-2 rounded-md font-medium transition ${
+                    activeTab === 'clone'
+                      ? 'bg-white text-indigo-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Voice Cloning
+                </button>
               </div>
-
-              <button
-                onClick={generateSpeech}
-                disabled={loading || !text.trim()}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Generating Speech...
-                  </span>
-                ) : (
-                  'Generate Speech'
-                )}
-              </button>
-
-              {error && (
-                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-red-700">{error}</p>
-                </div>
-              )}
-
-              {audioUrl && (
-                <div className="mt-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Generated Audio</h3>
-                  <AudioPlayer audioUrl={audioUrl} />
-                  <div className="mt-4 flex gap-4">
-                    <a 
-                      href={audioUrl} 
-                      download="odiadev-tts-output.mp3"
-                      className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition"
-                    >
-                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      Download MP3
-                    </a>
-                  </div>
-                </div>
-              )}
+            </div>
+            
+            {/* Tab Content */}
+            <div className="max-w-4xl mx-auto">
+              {activeTab === 'tts' ? <TTSPlayer /> : <VoiceCloner />}
             </div>
           </div>
 
