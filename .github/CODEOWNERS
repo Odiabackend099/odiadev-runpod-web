@@ -1,0 +1,6 @@
+# Default owners
+*  @odiadev  @your-tech-lead
+# Backend critical
+/backend/*  @your-tech-lead
+# Infra
+/infra/*    @infra-owner
