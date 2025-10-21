@@ -1,4 +1,10 @@
-# ODIADEV-TTS 1.6B
+# ODIADEV AI - Voice TTS Platform
+
+**Human-Like Voice AI for Africa's Digital Future**
+
+---
+
+## 🚀 About ODIADEV AI
 
 Proprietary neural voice engine by ODIADEV AI LTD. Convert text to natural speech with our 1.6-billion-parameter model.
 
