@@ -89,3 +89,5 @@ DIA_MODEL_ID=nari-labs/Dia-1.6B
 ## 📄 License
 
 Proprietary - © 2025 ODIADEV AI LTD
+
+
